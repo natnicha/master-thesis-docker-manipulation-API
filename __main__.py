@@ -19,16 +19,17 @@ def get_cpu_usage_percent(container_stats: Dict[str, Any]):
 
 
 def get_ram_usage_percent(container_stats: Dict[str, Any]):
-  return stats['memory_stats']['usage']/stats['memory_stats']['limit'] * 100
+  return container_stats['memory_stats']['usage']/container_stats['memory_stats']['limit'] * 100
 
 
 if __name__ == "__main__":
   client = docker.from_env()
   containers = client.containers.list(filters={"status": ["running"]})
-  stats: Dict[str, Any] = containers[0].stats(stream=False)
 
-  cpu_percent = get_cpu_usage_percent(stats)
-  logging.info(f"CPU usage: {round(cpu_percent, 2)}%")
+  logging.info("CONTAINER ID \tNAME \t\tCPU % \t\tMEM % \tUSAGE / LIMIT")
+  for container in containers:
+    stats: Dict[str, Any] = container.stats(stream=False)
+    cpu_percent = get_cpu_usage_percent(stats)
+    memory_percent = get_ram_usage_percent(stats)
 
-  memory_percent = get_ram_usage_percent(stats)
-  logging.info(f"Memory usage: {round(memory_percent, 2) }% ({round(stats['memory_stats']['usage']/MB, 2)} MB / {round(stats['memory_stats']['limit']/GB, 2)} GB)")
+    logging.info(f"{container.short_id} \t{container.name[:12]} \t{round(cpu_percent, 2)}% \t\t{round(memory_percent, 2)}% \t{round(stats['memory_stats']['usage']/MB, 2)} MB / {round(stats['memory_stats']['limit']/GB, 2)} GB")
