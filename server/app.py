@@ -1,5 +1,6 @@
 from flask import Flask
 from model import *
+from containers import *
 
 app = Flask(__name__)
 
@@ -9,15 +10,8 @@ def hello():
   
 @app.route('/containers')
 def containers():   
-    container = Container(
-        id='efb6c0c4566b', 
-        name='ml.2.q5iuqge', 
-        cpu_percent=0.19, 
-        mem_percent=7.73, 
-        mem_usage_mb=297.71, 
-        mem_limit_gb=3.76
-    )
+    containers_info = get_containers_info()
     return {
-        'containers': [container.__dict__]
+        'containers': containers_info
     }
 
