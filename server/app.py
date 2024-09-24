@@ -20,5 +20,5 @@ def scale_in():
     return {}
 
 @app.route('/scale/out', methods=['POST'])
-def scale_in():
+def scale_out():
     return {}
