@@ -1,10 +1,9 @@
 import docker
 import logging
 from datetime import datetime
-import time
 
 MIN_REPLICAS = 1
-MAX_REPLICAS = 5
+MAX_REPLICAS = 10
 
 class ScalingPod():
   In = -1
@@ -35,9 +34,17 @@ def scale_service(scale: ScalingPod):
     finish_dateTime = datetime.now()
     time_spent = finish_dateTime-start_dateTime
     logging.info(f"successful scaling {scale} with: {time_spent}")
-    return {'time_spent_sec': time_spent.total_seconds()}
+    return {
+      'start_time': start_dateTime,
+      'finish_time': finish_dateTime,
+      'time_spent_sec': time_spent.total_seconds()
+    }
   else:
-    return {'time_spent_sec': 0.00}
+    return {
+      'start_time': 0.0,
+      'finish_time': 0.0,
+      'time_spent_sec': 0.00
+    }
 
 
 def check_container_status(target_replicas: int):

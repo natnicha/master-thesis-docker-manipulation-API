@@ -7,6 +7,7 @@ name = "pypi"
 docker = "*"
 flask = "*"
 pydantic = "*"
+pandas = "*"
 
 [dev-packages]
 
