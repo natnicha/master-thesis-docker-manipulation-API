@@ -1,4 +1,5 @@
-from flask import Flask, request
+import datetime
+from flask import Flask
 import containers
 import pods
 import req_stat
@@ -19,11 +20,16 @@ def get_containers():
 @app.route('/app/stat', methods=['GET'])
 def get_stat():
   containers_info = containers.get_containers_info()
-  args = request.args.to_dict()
-  requests_stat = req_stat.get_stat(args['from'], args['to'])
+  requests_stat = req_stat.get_stat()
   return {
     'containers': containers_info,
     'requests_stat': requests_stat
+  }
+
+@app.route('/app/now', methods=['GET'])
+def get_now():
+  return {
+    'now': datetime.datetime.timestamp(datetime.datetime.now()),
   }
 
 @app.route('/scale/in', methods=['POST'])

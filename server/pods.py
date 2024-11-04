@@ -35,14 +35,16 @@ def scale_service(scale: ScalingPod):
     time_spent = finish_dateTime-start_dateTime
     logging.info(f"successful scaling {scale} with: {time_spent}")
     return {
-      'start_time': start_dateTime,
-      'finish_time': finish_dateTime,
+      'start_time': datetime.timestamp(start_dateTime),
+      'finish_time': datetime.timestamp(finish_dateTime),
       'time_spent_sec': time_spent.total_seconds()
     }
   else:
+    now = datetime.now()
+    datetime_now = datetime.timestamp(now)
     return {
-      'start_time': 0.0,
-      'finish_time': 0.0,
+      'start_time': datetime_now,
+      'finish_time': datetime_now,
       'time_spent_sec': 0.00
     }
 
