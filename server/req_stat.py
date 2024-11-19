@@ -4,7 +4,7 @@ import pandas as pd
 
 def get_stat():
     execute_test()
-    STAT_FILE = '../log/results-tree-report.csv'
+    STAT_FILE = '../log/results-tree-report-reward.csv'
     stat = pd.read_csv(STAT_FILE)
     
     avg_latency = stat["Latency"].mean()
@@ -25,6 +25,6 @@ def get_stat():
     }
 
 def execute_test():
-    JMETER_TEST_CMD = '''cmd /c "cd C:\\Users\\natni\\Downloads\\apache-jmeter-5.6.3\\bin && jmeter -f -n -t Thread-Group.jmx"'''
+    JMETER_TEST_CMD = '''cmd /c "cd C:\\Users\\natni\\Downloads\\apache-jmeter-5.6.3\\bin && jmeter -f -n -t Thread-Reward-Test.jmx"'''
     p = subprocess.run(JMETER_TEST_CMD, shell=True, capture_output=True, text=True)
     logging.info(p)

@@ -23,19 +23,27 @@ def get_ram_usage_percent(container_stats: Dict[str, Any]):
   return container_stats['memory_stats']['usage']/container_stats['memory_stats']['limit'] * 100
 
 
-def get_containers_info() -> list:
+def get_containers_info() -> dict:
   client = docker.from_env()
-  containers = client.containers.list(filters={"status": ["running"]})
+  containers = client.containers.list(filters={"status": ["running"], "name":["ml_app*"]})
 
   containers_info = []
+  total_system_cpu = 0.0
   logging.info("CONTAINER ID \tNAME \t\tCPU % \t\tMEM % \tUSAGE / LIMIT")
   for container in containers:
     stats: Dict[str, Any] = container.stats(stream=False)
     cpu_percent = get_cpu_usage_percent(stats)
+    total_system_cpu += cpu_percent
     memory_percent = get_ram_usage_percent(stats)
 
     info = Container(id=container.short_id, name=container.name[:12], cpu_percent=round(cpu_percent, 2), mem_percent=round(memory_percent, 2), mem_usage_mb=round(stats['memory_stats']['usage']/MB, 2), mem_limit_gb=round(stats['memory_stats']['limit']/GB, 2))
     logging.info(f"{info.id} \t{info.name} \t{info.cpu_percent}% \t\t{info.mem_percent}% \t{info.mem_usage_mb} MB / {info.mem_limit_gb} GB")
     containers_info.append(info.__dict__)
   
-  return containers_info
+  return {
+    'system': {
+      'usage_percentage': round(total_system_cpu, 2),
+      'online_pods': len(containers_info)
+    },
+    'container': containers_info
+  }

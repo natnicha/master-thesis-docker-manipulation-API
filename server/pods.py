@@ -3,7 +3,7 @@ import logging
 from datetime import datetime
 
 MIN_REPLICAS = 1
-MAX_REPLICAS = 10
+MAX_REPLICAS = 5
 
 class ScalingPod():
   In = -1
@@ -11,7 +11,7 @@ class ScalingPod():
 
 def get_service_info():
   client = docker.from_env()
-  services = client.services.list()
+  services = client.services.list(filters={"name":["ml_app"]})
   return services[0]
 
 def get_service_replicas(service_info: dict):

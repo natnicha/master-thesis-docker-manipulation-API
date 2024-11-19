@@ -13,9 +13,7 @@ def hello():
 @app.route('/containers', methods=['GET'])
 def get_containers():   
   containers_info = containers.get_containers_info()
-  return {
-    'containers': containers_info
-  }
+  return containers_info
 
 @app.route('/app/stat', methods=['GET'])
 def get_stat():
