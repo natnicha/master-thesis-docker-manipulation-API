@@ -1,7 +1,8 @@
+from decimal import Decimal
 import logging
-from typing import Any, Dict
-import docker
 from model import *
+from kubernetes import client, config
+import re
 
 OKGREEN = '\033[92m'
 ENDC = '\033[0m'
@@ -11,33 +12,58 @@ GB = 1024*1024*1024
 
 logging.basicConfig(level=logging.INFO, format=f"{OKGREEN}%(levelname)s{ENDC} %(message)s")
 
-def get_cpu_usage_percent(container_stats: Dict[str, Any]):
-  cpu_delta: int = container_stats['cpu_stats']['cpu_usage']['total_usage'] - container_stats['precpu_stats']['cpu_usage']['total_usage']
-  system_delta: int = container_stats['cpu_stats']['system_cpu_usage'] - container_stats['precpu_stats']['system_cpu_usage']
-  number_of_cores: int = len(container_stats['cpu_stats']['cpu_usage']['percpu_usage'])
-  cpu_percent: float = (cpu_delta / system_delta) * number_of_cores * 100
-  return cpu_percent
+CONVERSION_METRICS = {'n': '0.000000001', 'm':'0.001', 'Ti': '1099511627776', 'Gi': '1073741824', 'Mi': '1048576', 'Ki': '1024' }
 
-
-def get_ram_usage_percent(container_stats: Dict[str, Any]):
-  return container_stats['memory_stats']['usage']/container_stats['memory_stats']['limit'] * 100
-
+def convert_to_byte(value: str):
+    global CONVERSION_METRICS
+    match = re.search(r'[a-zA-Z]{1,2}$', value)
+    if match:
+        metric = match.group()
+        multiple = CONVERSION_METRICS[metric]
+        value = value.replace(metric,'')
+        return Decimal(value)*Decimal(multiple)
+    return Decimal(value)
 
 def get_containers_info() -> dict:
-  client = docker.from_env()
-  containers = client.containers.list(filters={"status": ["running"], "name":["ml_app*"]})
+  config.load_kube_config()
+  api = client.CustomObjectsApi()
+  v1 = client.CoreV1Api()
 
+  k8s_pods = api.list_namespaced_custom_object("metrics.k8s.io", "v1beta1", "default", "pods")
   containers_info = []
-  total_system_cpu = 0.0
-  logging.info("CONTAINER ID \tNAME \t\tCPU % \t\tMEM % \tUSAGE / LIMIT")
-  for container in containers:
-    stats: Dict[str, Any] = container.stats(stream=False)
-    cpu_percent = get_cpu_usage_percent(stats)
-    total_system_cpu += cpu_percent
-    memory_percent = get_ram_usage_percent(stats)
-
-    info = Container(id=container.short_id, name=container.name[:12], cpu_percent=round(cpu_percent, 2), mem_percent=round(memory_percent, 2), mem_usage_mb=round(stats['memory_stats']['usage']/MB, 2), mem_limit_gb=round(stats['memory_stats']['limit']/GB, 2))
-    logging.info(f"{info.id} \t{info.name} \t{info.cpu_percent}% \t\t{info.mem_percent}% \t{info.mem_usage_mb} MB / {info.mem_limit_gb} GB")
+  total_system_cpu = 0
+  
+  logging.info("CONTAINER NAME \t\tCPU % \tUSAGE / REQ \t\tMEM % \tUSAGE / REQ")
+  for stats in k8s_pods['items']:
+    res = v1.read_namespaced_pod_status(stats['metadata']['name'], "default")
+    
+    usage = {
+      'name': stats['metadata']['name'],
+      'cpu' : stats['containers'][0]['usage']['cpu'],
+      'mem': stats['containers'][0]['usage']['memory'],
+      'req_cpu': res.spec.containers[0].resources.requests['cpu'],
+      'req_mem': res.spec.containers[0].resources.requests['memory'],
+    }
+    converted_usage = {
+      'name': stats['metadata']['name'],
+      'cpu' : convert_to_byte(usage['cpu']),
+      'mem': convert_to_byte(usage['mem']),
+      'req_cpu': convert_to_byte(usage['req_cpu']),
+      'req_mem': convert_to_byte(usage['req_mem']),
+    }
+    converted_usage['cpu_percent'] = round(converted_usage['cpu']/converted_usage['req_cpu'], 2)
+    converted_usage['mem_percent'] = round(converted_usage['mem']/converted_usage['req_mem'], 2)
+    
+    info = Container(name=converted_usage['name'], 
+      cpu=converted_usage['cpu'], 
+      mem=converted_usage['mem'], 
+      req_mem=converted_usage['req_mem'], 
+      req_cpu=converted_usage['req_cpu'], 
+      cpu_percent=converted_usage['cpu_percent'], 
+      mem_percent=converted_usage['mem_percent']
+    )
+    total_system_cpu += info.cpu
+    logging.info(f"{info.name} \t{info.cpu_percent} \t{info.cpu} / {info.req_cpu} \t{info.mem_percent} \t{info.mem} / {info.req_mem}")
     containers_info.append(info.__dict__)
   
   return {
