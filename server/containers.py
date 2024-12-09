@@ -49,8 +49,8 @@ def get_containers_info() -> dict:
       'req_cpu': convert_to_byte(usage['req_cpu']),
       'req_mem': convert_to_byte(usage['req_mem']),
     }
-    converted_usage['cpu_percent'] = round(converted_usage['cpu']/converted_usage['req_cpu'], 2)
-    converted_usage['mem_percent'] = round(converted_usage['mem']/converted_usage['req_mem'], 2)
+    converted_usage['cpu_percent'] = round(100*converted_usage['cpu']/converted_usage['req_cpu'], 2)
+    converted_usage['mem_percent'] = round(100*converted_usage['mem']/converted_usage['req_mem'], 2)
     
     info = Container(name=converted_usage['name'], 
       cpu=converted_usage['cpu'], 
