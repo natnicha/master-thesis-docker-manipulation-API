@@ -29,6 +29,7 @@ def get_containers_info() -> dict:
   k8s_pods = api.list_namespaced_custom_object("metrics.k8s.io", "v1beta1", "default", "pods")
   containers_info = []
   total_system_cpu = 0
+  total_system_mem = 0
   
   logging.info("CONTAINER NAME \t\tCPU % \tUSAGE / REQ \t\tMEM % \tUSAGE / REQ")
   for stats in k8s_pods['items']:
@@ -59,13 +60,15 @@ def get_containers_info() -> dict:
       cpu_percent=converted_usage['cpu_percent'], 
       mem_percent=converted_usage['mem_percent']
     )
-    total_system_cpu += info.cpu
+    total_system_cpu += info.cpu_percent
+    total_system_mem += info.mem_percent
     logging.info(f"{info.name} \t{info.cpu_percent} \t{info.cpu} / {info.req_cpu} \t{info.mem_percent} \t{info.mem} / {info.req_mem}")
     containers_info.append(info.__dict__)
   
   return {
     'system': {
-      'usage_percentage': round(total_system_cpu, 2),
+      'cpu_percent': round(total_system_cpu/len(containers_info), 2),
+      'mem_percent': round(total_system_mem/len(containers_info), 2),
       'online_pods': len(containers_info)
     },
     'container': containers_info
