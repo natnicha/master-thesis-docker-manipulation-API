@@ -9,7 +9,7 @@ ENDC = '\033[0m'
 
 logging.basicConfig(level=logging.INFO, format=f"{OKGREEN}%(levelname)s{ENDC} %(message)s")
 
-CONVERSION_METRICS = {'n': '0.000000001', 'm':'0.001', 'Ti': '1099511627776', 'Gi': '1073741824', 'Mi': '1048576', 'Ki': '1024' }
+CONVERSION_METRICS = {'n': '0.000000001', 'u':'0.000001', 'm':'0.001', 'Ti': '1099511627776', 'Gi': '1073741824', 'Mi': '1048576', 'Ki': '1024' }
 
 def convert_to_byte(value: str):
     global CONVERSION_METRICS
