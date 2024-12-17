@@ -4,7 +4,7 @@ from kubernetes import client, config
 from kubernetes.client.rest import ApiException
 import containers
 MIN_REPLICAS = 1
-MAX_REPLICAS = 10
+MAX_REPLICAS = 5
 
 class ScalingPod():
   In = -1
