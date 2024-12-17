@@ -15,6 +15,10 @@ def get_containers():
   containers_info = containers.get_containers_info()
   return containers_info
 
+@app.route('/containers/confirm', methods=['POST'])
+def confirmed_containers():
+  return pods.confirmed_containers()
+
 @app.route('/app/stat', methods=['GET'])
 def get_stat():
   containers_info = containers.get_containers_info()
@@ -30,14 +34,14 @@ def get_now():
     'now': datetime.datetime.timestamp(datetime.datetime.now()),
   }
 
-@app.route('/set-pod-count/<pod_count>', methods=['POST'])
+@app.route('/pod/set-pod-count/<pod_count>', methods=['POST'])
 def post_set_pod(pod_count):
   return pods.set_pod_count(int(pod_count))
 
-@app.route('/scale/in', methods=['POST'])
+@app.route('/pod/scale/in', methods=['POST'])
 def post_scale_in():
   return pods.scale_service_in()
 
-@app.route('/scale/out', methods=['POST'])
+@app.route('/pod/scale/out', methods=['POST'])
 def post_scale_out():
   return pods.scale_service_out()

@@ -1,8 +1,8 @@
 from decimal import Decimal
 import logging
-from model import *
 from kubernetes import client, config
 import re
+from model import *
 
 OKGREEN = '\033[92m'
 ENDC = '\033[0m'

@@ -90,3 +90,9 @@ def set_pod_count(pod_count: int):
       'finish_time': datetime_now,
       'time_spent_sec': 0.00
   }
+
+def confirmed_containers():
+  container_info = containers.get_containers_info()
+  online_pods = int(container_info['system']['online_pods'])
+  set_pod_count(online_pods)
+  return containers.get_containers_info()
