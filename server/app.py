@@ -30,6 +30,10 @@ def get_now():
     'now': datetime.datetime.timestamp(datetime.datetime.now()),
   }
 
+@app.route('/set-pod-count/<pod_count>', methods=['POST'])
+def post_set_pod(pod_count):
+  return pods.set_pod_count(int(pod_count))
+
 @app.route('/scale/in', methods=['POST'])
 def post_scale_in():
   return pods.scale_service_in()

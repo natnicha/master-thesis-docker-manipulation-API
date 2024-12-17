@@ -68,3 +68,25 @@ def check_container_status(target_replicas: int):
     else:
       is_all_pod_running = True
   return 
+
+def set_pod_count(pod_count: int):
+  if pod_count >= MIN_REPLICAS and pod_count <= MAX_REPLICAS:
+    start_dateTime = datetime.now()
+    scale_pods(pod_count)
+    check_container_status(pod_count)
+    finish_dateTime = datetime.now()
+    time_spent = finish_dateTime-start_dateTime
+    logging.info(f"successful scaling {pod_count} with: {time_spent}")
+    return {
+      'start_time': datetime.timestamp(start_dateTime),
+      'finish_time': datetime.timestamp(finish_dateTime),
+      'time_spent_sec': time_spent.total_seconds()
+  }
+  else:
+    now = datetime.now()
+    datetime_now = datetime.timestamp(now)
+    return {
+      'start_time': datetime_now,
+      'finish_time': datetime_now,
+      'time_spent_sec': 0.00
+  }
