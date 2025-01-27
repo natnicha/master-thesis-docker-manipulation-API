@@ -31,7 +31,7 @@ def scale_service_out():
   return scale_service(ScalingPod.Out)
 
 def scale_service(scale: ScalingPod):
-  target_service = containers.get_containers_info()
+  target_service = containers.get_pod_info()
   current_replicas = get_service_replicas(target_service)
   target_replicas = current_replicas + scale
   if target_replicas >= MIN_REPLICAS and target_replicas <= MAX_REPLICAS:
@@ -91,8 +91,8 @@ def set_pod_count(pod_count: int):
       'time_spent_sec': 0.00
   }
 
-def confirmed_containers():
-  container_info = containers.get_containers_info()
+def get_confirmed_pod():
+  container_info = containers.get_pod_info()
   online_pods = int(container_info['system']['online_pods'])
   set_pod_count(online_pods)
-  return containers.get_containers_info()
+  return containers.get_pod_info()

@@ -21,7 +21,7 @@ def convert_to_byte(value: str):
         return Decimal(value)*Decimal(multiple)
     return Decimal(value)
 
-def get_containers_info() -> dict:
+def get_pod_info() -> dict:
   config.load_kube_config()
   api = client.CustomObjectsApi()
   v1 = client.CoreV1Api()

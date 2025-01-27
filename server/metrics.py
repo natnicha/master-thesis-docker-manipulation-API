@@ -21,7 +21,7 @@ def collect_metrics():
   while collected_time < timeout :
     collected_time = datetime.datetime.now()
     try:
-      containers_info = containers.get_containers_info()
+      containers_info = containers.get_pod_info()
     except Exception as e:
       logging.info(str(e))
       continue
