@@ -2,9 +2,20 @@
 
 All APIs in this repository aim to manage pods running under service in Kubernetes. This repository is implemented to facilitate our agent in Reinforcement Learning (RL) from [Adaptive Autoscaler Repository](https://github.com/natnicha/master-thesis-auto-scaler).
 
-Docker Manipulation APIs are implemented by [Python](https://www.python.org/), using [Docker SDK](https://docs.docker.com/reference/api/engine/sdk/)
-and [Kubernetes Client](https://kubernetes.io/docs/reference/using-api/client-libraries/). This service is designed to centralize and streamline
-communication with services on Kubernetes, thereby preventing circular dependencies in software architecture, and making maintenance easier.
+Docker Manipulation APIs are implemented by [Python](https://www.python.org/), using [Docker SDK](https://docs.docker.com/reference/api/engine/sdk/) and [Kubernetes Client](https://kubernetes.io/docs/reference/using-api/client-libraries/). This service is designed to centralize and streamline communication with services on Kubernetes, thereby preventing circular dependencies in software architecture, and making maintenance easier.
+
+## About Project
+
+A research under a title of `Adaptive Horizontal Pod Autoscaling (AHPA) Based on Reinforcement Learning in Kubernetes for Machine Learning`, introducing the Adaptive Horizontal Pod Autoscaler (AHPA), which utilizes RL with a Deep Q-Network (DQN) to dynamically adjust the number of Kubernetes Pods for horizontal scaling, enabling both scaling in and scaling out. We evaluate the performance and reliability of AHPA in image classification tasks, comparing its effectiveness against a traditional horizontal autoscaler in Kubernetes.
+
+## Project Components
+
+This project consists of the following three components, distributed across different repositories, working together seamlessly.
+
+- [**RL-Based Autoscaler**](https://github.com/natnicha/master-thesis-auto-scaler): The main repository for RL-based Adaptive Horizontal Autoscaler (AHPA), implemented by Deep Q-Networks (DQN). It includes an agent and its learning procedure, with an ADAM optimizer set as the default.
+- [**Docker-Manipulation-API**](https://github.com/natnicha/master-thesis-docker-manipulation-API): The service facilitates an RL agent by enabling seamless communication between the RL agent and the service running on Kubernetes as part of our research.
+- [**Image-Classification**](https://github.com/natnicha/master-thesis-image-classification): The target application in our study, image classification, serves image classifi-
+cation application based on user-submitted photos.
 
 ## Built With
 
