@@ -19,7 +19,7 @@ This project consists of the following three components, distributed across diff
 ## RL Execution
 An agent in reinforcement learning, supported by auxiliary services, is actively learning from the environment in its setup.
 
-![AHPA Visual](visual.gif "AHPA")
+![AHPA Visual](./visual.gif "AHPA")
 
 ## Built With
 
