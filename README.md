@@ -26,9 +26,12 @@ cation application based on user-submitted photos.
 ## Routes Information
 Using [Flask](https://flask.palletsprojects.com/en/stable/), these following APIs are implemented.
 
-1. **GET /pod**: This service provides clients with detailed and real-time information about the state of Pods in the system. It includes key performance metrics such as CPU and memory utilization percentages, which help assess the resource consumption and efficiency of each Pod. Additionally, the service reports the current number of active or running Pods, offering insights into the overall health and scale of the deployment.
 
-2.  **POST /pod/confirm**: Similar to the GET /pod API, this API retrieves all relevant information and additionally terminates Pods that are not in a ’running’ status. In our study, the following statuses are considered unsatisfactory: 
+1. **GET /**: This API is a default route for health checks, which simply returns a `hello-world` message.
+
+2. **GET /pod**: This service provides clients with detailed and real-time information about the state of Pods in the system. It includes key performance metrics such as CPU and memory utilization percentages, which help assess the resource consumption and efficiency of each Pod. Additionally, the service reports the current number of active or running Pods, offering insights into the overall health and scale of the deployment.
+
+3.  **POST /pod/confirm**: Similar to the GET /pod API, this API retrieves all relevant information and additionally terminates Pods that are not in a ’running’ status. In our study, the following statuses are considered unsatisfactory: 
 - Pending - This status occurs when at least one primary container is initiated successfully, but the Pod is not yet fully operational.
 - CrashLoopBackOff - This indicates the Pod is stuck in a restart loop due to an overloaded or incorrectly requested configuration. 
 - ImagePullbackOff - This occurs when a container in the Pod fails to pull the required image from a container registry.
@@ -36,18 +39,17 @@ Using [Flask](https://flask.palletsprojects.com/en/stable/), these following API
 
     This approach helps confirm that all operational Pods are ready, thereby facilitating the agent’s ability to learn and perform effectively.
 
-3. **POST /pod/scale/in**: This API specifies a number of online Pods in the cluster and facilitates scaling in by reducing the number of Pods by one. Scaling-in refers to the process of decreasing the cluster size by terminating
+4. **POST /pod/scale/in**: This API specifies a number of online Pods in the cluster and facilitates scaling in by reducing the number of Pods by one. Scaling-in refers to the process of decreasing the cluster size by terminating
 one Pod, thereby freeing up resources when demand decreases. The scaling operation is constrained within a defined range, with a minimum of 1 Pod and a maximum of 5 Pods allowed.
 
-4. **POST /pod/scale/out**: Similar to the POST /pod/scale/in API, this API specifies a number of online Pods in the cluster and facilitates scaling by adding one additional Pod. The scaling operation is designed to increase the number of Pods incrementally, with a limit on the number of Pods that can be scaled within the cluster. Specifically, the scaling is constrained within a range of 1 to 5 Pods, ensuring that the cluster remains within manageable limits.
+5. **POST /pod/scale/out**: Similar to the POST /pod/scale/in API, this API specifies a number of online Pods in the cluster and facilitates scaling by adding one additional Pod. The scaling operation is designed to increase the number of Pods incrementally, with a limit on the number of Pods that can be scaled within the cluster. Specifically, the scaling is constrained within a range of 1 to 5 Pods, ensuring that the cluster remains within manageable limits.
 
-5. **GET /app/stat**: Similar to the previous API, GET /pod, this API retrieves all relevant Pod information while also performing service testing, specifically following a scaling event. After gathering the necessary data, this API executes the Reward Feedback JMeter file. The JMeter file simulates traffic and captures performance metrics, which are then used to evaluate the system’s responsiveness post-scaling. Subsequently, the API calculates key performance indicators, specifically the average latency and packet drop percentage, which are crucial for RL reward computations. These metrics provide essential feedback that helps refine the agent’s decision-
+6. **GET /app/stat**: Similar to the previous API, GET /pod, this API retrieves all relevant Pod information while also performing service testing, specifically following a scaling event. After gathering the necessary data, this API executes the Reward Feedback JMeter file. The JMeter file simulates traffic and captures performance metrics, which are then used to evaluate the system’s responsiveness post-scaling. Subsequently, the API calculates key performance indicators, specifically the average latency and packet drop percentage, which are crucial for RL reward computations. These metrics provide essential feedback that helps refine the agent’s decision-
 making process, guiding it toward optimal scaling actions.
 
-
-6. **POST /pod/set-pod-count/<pod_count>**: This API has been implemented to enable administrators to manually configure the number of pods in the system. This feature is designed to provide a quick and effective solution for addressing unexpected issues or resource imbalances, ensuring system stability and performance. By allowing administrators to adjust pod counts as needed, this API helps maintain control over the system's scaling behavior, especially during times when automated scaling might not respond adequately to certain challenges or disruptions.
+7. **POST /pod/set-pod-count/<pod_count>**: This API has been implemented to enable administrators to manually configure the number of pods in the system. This feature is designed to provide a quick and effective solution for addressing unexpected issues or resource imbalances, ensuring system stability and performance. By allowing administrators to adjust pod counts as needed, this API helps maintain control over the system's scaling behavior, especially during times when automated scaling might not respond adequately to certain challenges or disruptions.
  
-7. **POST /metrics**: This API collect metrics from the target application inlcuding CPU percentage, memory, online pods and total pods at a moment every, approximaltly, 0.2 seconds. This route has been specifically designed and implemented to provide dedicated support for thesis writing and the subsequent analysis of results.
+8. **POST /metrics**: This API collect metrics from the target application inlcuding CPU percentage, memory, online pods and total pods at a moment every, approximaltly, 0.2 seconds. This route has been specifically designed and implemented to provide dedicated support for thesis writing and the subsequent analysis of results.
 
 
 ## Getting Started
