@@ -1,8 +1,10 @@
 # Welcome to Docker Manipulation APIs
 
-All APIs in this repository aim to manage pods running under service in Kubernetes. This repository is implemented to facilitate our agent in Reinforcement Learning (RL) from [Adaptive Autoscaler Repository](https://github.com/natnicha/master-thesis-auto-scaler).
+This service is designed to centralize and streamline communication between an agent in reinforcement learning and services on Kind Kubernetes, thereby preventing circular dependencies in software architecture, and making maintenance easier.
 
-Docker Manipulation APIs are implemented by [Python](https://www.python.org/), using [Docker SDK](https://docs.docker.com/reference/api/engine/sdk/) and [Kubernetes Client](https://kubernetes.io/docs/reference/using-api/client-libraries/). This service is designed to centralize and streamline communication with services on Kubernetes, thereby preventing circular dependencies in software architecture, and making maintenance easier.
+All APIs in this repository aim to manage pods running under a service in Kubernetes. This repository is implemented to facilitate our agent in Reinforcement Learning (RL) from [Adaptive Autoscaler Repository](https://github.com/natnicha/master-thesis-auto-scaler).
+
+Docker Manipulation APIs are implemented by [Python](https://www.python.org/), using [Docker SDK](https://docs.docker.com/reference/api/engine/sdk/) and [Kubernetes Client](https://kubernetes.io/docs/reference/using-api/client-libraries/). 
 
 ## About Project
 
