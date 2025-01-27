@@ -6,12 +6,11 @@ Docker Manipulation APIs are implemented by [Python](https://www.python.org/), u
 and [Kubernetes Client](https://kubernetes.io/docs/reference/using-api/client-libraries/). This service is designed to centralize and streamline
 communication with services on Kubernetes, thereby preventing circular dependencies in software architecture, and making maintenance easier.
 
-<img src="https://img.shields.io/badge/Test-Pass-green"> 
-<img src="https://img.shields.io/badge/Secuiry-Pass-blue">
-
 ## Built With
 
 [<img src="https://www.python.org/static/img/python-logo.png" height="50">](https://www.python.org/) [<img src="https://cdn.freebiesupply.com/logos/large/2x/docker-logo-png-transparent.png" height="50">](https://docs.docker.com/reference/api/engine/sdk/) [<img src="https://juststickers.in/wp-content/uploads/2018/11/kubernetes-wordmark.png" height="50">](https://kubernetes.io/docs/reference/using-api/client-libraries/) [<img src="https://flask.palletsprojects.com/en/stable/_images/flask-horizontal.png" height="50">](https://flask.palletsprojects.com/en/stable/)
+
+<img src="https://img.shields.io/badge/Test-Pass-green"> <img src="https://img.shields.io/badge/Secuiry-Pass-blue">
 
 ## Routes Information
 Using [Flask](https://flask.palletsprojects.com/en/stable/), these following APIs are implemented.
