@@ -21,9 +21,11 @@ Using [Flask](https://flask.palletsprojects.com/en/stable/), these following API
 - Pending - This status occurs when at least one primary container is initiated successfully, but the Pod is not yet fully operational.
 - CrashLoopBackOff - This indicates the Pod is stuck in a restart loop due to an overloaded or incorrectly requested configuration. 
 - ImagePullbackOff - This occurs when a container in the Pod fails to pull the required image from a container registry.
-- Terminating - This status signifies that the Pod is scheduled for deletion but has not yet been fully removed from the node. By terminating Pods in these unsatisfactory states, we ensure that only active and healthy Pods remain. This approach helps confirm that all operational Pods are ready, thereby facilitating the agent’s ability to learn and perform effectively.
+- Terminating - This status signifies that the Pod is scheduled for deletion but has not yet been fully removed from the node. By terminating Pods in these unsatisfactory states, we ensure that only active and healthy Pods remain. 
 
-3. **POST /pod/scale/in**: This API specifies a number of online Pods in the cluster and facilitates scaling in by reducing the number of Pods by one. Scaling-in refers to the process of decreasing the cluster size by terminating
+    This approach helps confirm that all operational Pods are ready, thereby facilitating the agent’s ability to learn and perform effectively.
+
+1. **POST /pod/scale/in**: This API specifies a number of online Pods in the cluster and facilitates scaling in by reducing the number of Pods by one. Scaling-in refers to the process of decreasing the cluster size by terminating
 one Pod, thereby freeing up resources when demand decreases. The scaling operation is constrained within a defined range, with a minimum of 1 Pod and a maximum of 5 Pods allowed.
 
 1. **POST /pod/scale/out**: Similar to the POST /pod/scale/in API, this API specifies a number of online Pods in the cluster and facilitates scaling by adding one additional Pod. The scaling operation is designed to increase the number of Pods incrementally, with a limit on the number of Pods that can be scaled within the cluster. Specifically, the scaling is constrained within a range of 1 to 5 Pods, ensuring that the cluster remains within manageable limits.
@@ -32,9 +34,9 @@ one Pod, thereby freeing up resources when demand decreases. The scaling operati
 making process, guiding it toward optimal scaling actions.
 
 
-5. **POST /metrics**: This API collect metrics from the target application inlcuding CPU percentage, memory, online pods and total pods at a moment every, approximaltly, 0.2 seconds. 
-This route has been specifically designed and implemented to provide dedicated support for thesis writing and the subsequent analysis of results.
+6. **POST /metrics**: This API collect metrics from the target application inlcuding CPU percentage, memory, online pods and total pods at a moment every, approximaltly, 0.2 seconds. This route has been specifically designed and implemented to provide dedicated support for thesis writing and the subsequent analysis of results.
 
+7. **POST /pod/set-pod-count/<pod_count>**: This API has been implemented to enable administrators to manually configure the number of pods in the system. This feature is designed to provide a quick and effective solution for addressing unexpected issues or resource imbalances, ensuring system stability and performance. By allowing administrators to adjust pod counts as needed, this API helps maintain control over the system's scaling behavior, especially during times when automated scaling might not respond adequately to certain challenges or disruptions.
 
 ## Getting Started
 To start and test the service, follow the below instruction.
