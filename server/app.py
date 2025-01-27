@@ -1,4 +1,3 @@
-import datetime
 import logging
 from flask import Flask
 import containers
@@ -37,12 +36,6 @@ def collect_metrics():
     logging.info(str(e))
     return {"http": str(e)}
   return {"http": "200 OK"}
-
-@app.route('/app/now', methods=['GET'])
-def get_now():
-  return {
-    'now': datetime.datetime.timestamp(datetime.datetime.now()),
-  }
 
 @app.route('/pod/set-pod-count/<pod_count>', methods=['POST'])
 def post_set_pod(pod_count):
