@@ -14,8 +14,7 @@ This project consists of the following three components, distributed across diff
 
 - [**RL-Based Autoscaler**](https://github.com/natnicha/master-thesis-auto-scaler): The main repository for RL-based Adaptive Horizontal Autoscaler (AHPA), implemented by Deep Q-Networks (DQN). It includes an agent and its learning procedure, with an ADAM optimizer set as the default.
 - [**Docker-Manipulation-API**](https://github.com/natnicha/master-thesis-docker-manipulation-API): The service facilitates an RL agent by enabling seamless communication between the RL agent and the service running on Kubernetes as part of our research.
-- [**Image-Classification**](https://github.com/natnicha/master-thesis-image-classification): The target application in our study, image classification, serves image classifi-
-cation application based on user-submitted photos.
+- [**Image-Classification**](https://github.com/natnicha/master-thesis-image-classification): The target application in our study, image classification, serves image classification application based on user-submitted photos.
 
 ## Built With
 
