@@ -22,7 +22,7 @@ def scale_pods(replicas: int):
     print("Exception when calling AppsV1Api->patch_namespaced_deployment_scale: %s\n" % e)
 
 def get_service_replicas(service_info: dict):
-  return service_info['system']['online_pods']
+  return service_info['system']['total_pods']
 
 def scale_service_in():
   return scale_service(ScalingPod.In)

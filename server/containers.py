@@ -27,6 +27,12 @@ def get_containers_info() -> dict:
   v1 = client.CoreV1Api()
 
   k8s_pods = api.list_namespaced_custom_object("metrics.k8s.io", "v1beta1", "default", "pods")
+  pods = v1.list_pod_for_all_namespaces(watch=False)
+  total_pods = 0
+  for pod in pods.items:
+    if pod.metadata.namespace == "default":
+      total_pods = total_pods + 1
+
   containers_info = []
   total_system_cpu = 0
   total_system_mem = 0
@@ -65,11 +71,22 @@ def get_containers_info() -> dict:
     logging.info(f"{info.name} \t{info.cpu_percent} \t{info.cpu} / {info.req_cpu} \t{info.mem_percent} \t{info.mem} / {info.req_mem}")
     containers_info.append(info.__dict__)
   
-  return {
-    'system': {
-      'cpu_percent': round(total_system_cpu/len(containers_info), 2),
-      'mem_percent': round(total_system_mem/len(containers_info), 2),
-      'online_pods': len(containers_info)
-    },
-    'container': containers_info
-  }
+  if len(containers_info) == 0:
+    return {
+      'system': {
+        'cpu_percent': None,
+        'mem_percent': None,
+        'online_pods': None,
+        'total_pods': total_pods
+      }
+    }
+  else:
+    return {
+      'system': {
+        'cpu_percent': round(total_system_cpu/len(containers_info), 2),
+        'mem_percent': round(total_system_mem/len(containers_info), 2),
+        'online_pods': len(containers_info),
+        'total_pods': total_pods
+      },
+      'container': containers_info
+    }
