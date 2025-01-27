@@ -1,4 +1,5 @@
 import datetime
+import logging
 from flask import Flask
 import containers
 import pods
@@ -27,6 +28,15 @@ def get_stat():
     'containers': containers_info,
     'requests_stat': requests_stat
   }
+
+@app.route('/metrics', methods=['GET'])
+def collect_metrics():
+  try:
+    req_stat.collect_metrics()
+  except Exception as e:
+    logging.info(str(e))
+    return {"http": str(e)}
+  return {"http": "200 OK"}
 
 @app.route('/app/now', methods=['GET'])
 def get_now():
