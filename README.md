@@ -42,6 +42,12 @@ making process, guiding it toward optimal scaling actions.
 ## Getting Started
 To start and test the service, follow the below instruction.
 
+### Setting Up The Environment
+1. Installing Python and Dependencies
+This repository is developed by Python. So, install [Python](https://www.python.org/) in your working environment.
+
+2. Our repository applies virtual environment development, [Pipenv](https://pipenv.pypa.io/en/latest/). By using this, you can simply install pipenv and create your working environment. Then install all dependencies using `pipenv install` or `pipenv sync`.
+
 ### Starting the service
 To run this service, go to a subfolder named `server`, and run the service by flask using the following command.
 ```
