@@ -1,6 +1,5 @@
 import logging
 from flask import Flask
-import containers
 import pods
 import req_stat
 import metrics
@@ -13,7 +12,7 @@ def hello():
   
 @app.route('/pod', methods=['GET'])
 def get_pod():   
-  containers_info = containers.get_pod_info()
+  containers_info = pods.get_pod_info()
   return containers_info
 
 @app.route('/pod/confirm', methods=['POST'])
@@ -30,7 +29,7 @@ def post_scale_out():
 
 @app.route('/app/stat', methods=['GET'])
 def get_stat():
-  containers_info = containers.get_pod_info()
+  containers_info = pods.get_pod_info()
   requests_stat = req_stat.get_stat()
   return {
     'containers': containers_info,
